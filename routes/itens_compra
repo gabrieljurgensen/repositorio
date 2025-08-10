@@ -1,0 +1,54 @@
+// routes/itens_compra.js
+const express = require('express');
+const router = express.Router();
+const db = require('../db');
+
+// listar itens de compra
+router.get('/', (req, res) => {
+  db.query('SELECT * FROM itens_compra', (err, results) => {
+    if (err) { console.error(err); return res.status(500).json({ error: 'Erro ao buscar itens_compra' }); }
+    res.json(results);
+  });
+});
+
+// listar por compra_id
+router.get('/compra/:compra_id', (req, res) => {
+  db.query('SELECT * FROM itens_compra WHERE compra_id = ?', [req.params.compra_id], (err, results) => {
+    if (err) { console.error(err); return res.status(500).json({ error: 'Erro ao buscar itens de compra' }); }
+    res.json(results);
+  });
+});
+
+// criar item de compra
+router.post('/', (req, res) => {
+  const { compra_id, produto_id, qtd_comprada, preco_unitario } = req.body;
+  if (!compra_id || !produto_id || qtd_comprada === undefined) return res.status(400).json({ error: 'compra_id, produto_id e qtd_comprada obrigatórios' });
+
+  db.query('INSERT INTO itens_compra (compra_id, produto_id, qtd_comprada, preco_unitario, criado_em) VALUES (?, ?, ?, ?, NOW())',
+    [compra_id, produto_id, qtd_comprada, preco_unitario || 0], (err, result) => {
+      if (err) { console.error(err); return res.status(500).json({ error: 'Erro ao criar item_compra' }); }
+      res.status(201).json({ id: result.insertId });
+    });
+});
+
+// atualizar item
+router.put('/:id', (req, res) => {
+  const { compra_id, produto_id, qtd_comprada, preco_unitario } = req.body;
+  db.query('UPDATE itens_compra SET compra_id = ?, produto_id = ?, qtd_comprada = ?, preco_unitario = ?, atualizado_em = NOW() WHERE id = ?',
+    [compra_id, produto_id, qtd_comprada, preco_unitario, req.params.id], (err, result) => {
+      if (err) { console.error(err); return res.status(500).json({ error: 'Erro ao atualizar item_compra' }); }
+      if (result.affectedRows === 0) return res.status(404).json({ error: 'Item não encontrado' });
+      res.json({ message: 'Item atualizado' });
+    });
+});
+
+// deletar item
+router.delete('/:id', (req, res) => {
+  db.query('DELETE FROM itens_compra WHERE id = ?', [req.params.id], (err, result) => {
+    if (err) { console.error(err); return res.status(500).json({ error: 'Erro ao deletar item_compra' }); }
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Item não encontrado' });
+    res.json({ message: 'Item deletado' });
+  });
+});
+
+module.exports = router;
