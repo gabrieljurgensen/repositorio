@@ -29,7 +29,7 @@ app.use('/itens_venda', require('./routes/itens_venda'));
 app.use('/login', require('./routes/login'));
 
 // Inicialização do servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
