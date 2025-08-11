@@ -1,0 +1,229 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Projeto Integrador",
+    "version": "1.0.0",
+    "description": "Documentação básica das principais rotas da API."
+  },
+  "servers": [
+    { "url": "http://localhost:3000" }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Listar todos os usuários",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/User" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Usuário criado" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "summary": "Atualizar usuário",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Usuário atualizado" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar usuário",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Usuário deletado" },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login do usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "senha": { "type": "string" }
+                },
+                "required": ["email", "senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Login realizado" },
+          "401": { "description": "Usuário ou senha incorretos" }
+        }
+      }
+    },
+    "/produto": {
+      "get": {
+        "summary": "Listar todos os produtos",
+        "responses": {
+          "200": {
+            "description": "Lista de produtos",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Produto" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar novo produto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProdutoInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Produto criado" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/categoria": {
+      "get": {
+        "summary": "Listar todas as categorias",
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Categoria" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar nova categoria",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CategoriaInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Categoria criada" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "UserInput": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        },
+        "required": ["nome", "email", "senha"]
+      },
+      "Produto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "preco_pago": { "type": "number" },
+          "descricao": { "type": "string" },
+          "preco_vendido": { "type": "number" },
+          "id_categoria": { "type": "integer" },
+          "status": { "type": "integer" }
+        }
+      },
+      "ProdutoInput": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string" },
+          "preco_pago": { "type": "number" },
+          "descricao": { "type": "string" },
+          "preco_vendido": { "type": "number" },
+          "id_categoria": { "type": "integer" },
+          "status": { "type": "integer" }
+        },
+        "required": ["nome", "preco_pago", "id_categoria", "status"]
+      },
+      "Categoria": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" }
+        }
+      },
+      "CategoriaInput": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string" }
+        },
+        "required": ["nome"]
+      }
+    }
+  }
+}
+  "paths": {
+    "/exemplo": {
+      "get": {
+        "summary": "Exemplo de endpoint",
+        "responses": {
+          "200": {
+            "description": "Sucesso"
+          }
+        }
+      }
+    }
+  }
+}

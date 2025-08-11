@@ -3,8 +3,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./swagger.json'); // ou o arquivo yaml, ou o objeto json
 app.use(cors());
 app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 
 // Rota inicial
 app.get('/', (req, res) => {
@@ -29,3 +33,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
+
+module.exports = app;

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login realizado</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; text-align: center; }
+        h1 { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Login realizado com sucesso!</h1>
+    <p id="boasvindas"></p>
+    <a href="login.html">Sair</a>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const nome = params.get('nome');
+        if (nome) {
+            document.getElementById('boasvindas').textContent = 'Bem-vindo, ' + nome + '!';
+        }
+    </script>
+</body>
+</html>
