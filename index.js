@@ -1,4 +1,4 @@
-
+// Importa as dependências
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 });
 
 
-// Importação das rotas externas
+// Importa rotas externas
 app.use('/users', require('./routes/users'));
 app.use('/produto', require('./routes/produto'));
 app.use('/categoria', require('./routes/categoria'));
@@ -28,7 +28,7 @@ app.use('/itens_compra', require('./routes/itens_compra'));
 app.use('/itens_venda', require('./routes/itens_venda'));
 app.use('/login', require('./routes/login'));
 
-// Inicialização do servidor
+// Inicia o servidor
 const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
