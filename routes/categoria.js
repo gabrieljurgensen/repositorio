@@ -2,8 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-const swaggerUi = require('swagger-ui-express');
-;
+const swaggerJSDoc = require('swagger-jsdoc');
 
 // listar todas
 router.get('/', (req, res) => {

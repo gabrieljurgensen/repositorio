@@ -12,6 +12,7 @@
     "/users": {
       "get": {
         "summary": "Listar todos os usuários",
+        "tags": ["Usuários"],
         "responses": {
           "200": {
             "description": "Lista de usuários",
@@ -25,11 +26,13 @@
       },
       "post": {
         "summary": "Criar novo usuário",
+        "tags": ["Usuários"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UserInput" }
+              "schema": { "$ref": "#/components/schemas/UserInput" },
+              "example": { "nome": "João", "email": "joao@email.com", "senha": "123456" }
             }
           }
         },
@@ -40,8 +43,20 @@
       }
     },
     "/users/{id}": {
+      "get": {
+        "summary": "Buscar usuário por ID",
+        "tags": ["Usuários"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Usuário encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } },
+          "404": { "description": "Usuário não encontrado" }
+        }
+      },
       "put": {
         "summary": "Atualizar usuário",
+        "tags": ["Usuários"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
@@ -60,6 +75,7 @@
       },
       "delete": {
         "summary": "Deletar usuário",
+        "tags": ["Usuários"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
         ],
@@ -72,6 +88,7 @@
     "/login": {
       "post": {
         "summary": "Login do usuário",
+        "tags": ["Usuários"],
         "requestBody": {
           "required": true,
           "content": {
@@ -83,7 +100,8 @@
                   "senha": { "type": "string" }
                 },
                 "required": ["email", "senha"]
-              }
+              },
+              "example": { "email": "joao@email.com", "senha": "123456" }
             }
           }
         },
@@ -96,6 +114,7 @@
     "/produto": {
       "get": {
         "summary": "Listar todos os produtos",
+        "tags": ["Produtos"],
         "responses": {
           "200": {
             "description": "Lista de produtos",
@@ -109,11 +128,13 @@
       },
       "post": {
         "summary": "Criar novo produto",
+        "tags": ["Produtos"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ProdutoInput" }
+              "schema": { "$ref": "#/components/schemas/ProdutoInput" },
+              "example": { "nome": "Camiseta", "preco_pago": 20.5, "descricao": "Camiseta 100% algodão", "preco_vendido": 35, "id_categoria": 1, "status": 1 }
             }
           }
         },
@@ -123,9 +144,53 @@
         }
       }
     },
+    "/produto/{id}": {
+      "get": {
+        "summary": "Buscar produto por ID",
+        "tags": ["Produtos"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Produto encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Produto" } } } },
+          "404": { "description": "Produto não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar produto",
+        "tags": ["Produtos"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ProdutoInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Produto atualizado" },
+          "404": { "description": "Produto não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Excluir produto",
+        "tags": ["Produtos"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Produto excluído" },
+          "404": { "description": "Produto não encontrado" }
+        }
+      }
+    },
     "/categoria": {
       "get": {
         "summary": "Listar todas as categorias",
+        "tags": ["Categorias"],
         "responses": {
           "200": {
             "description": "Lista de categorias",
@@ -139,6 +204,40 @@
       },
       "post": {
         "summary": "Criar nova categoria",
+        "tags": ["Categorias"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CategoriaInput" },
+              "example": { "nome": "Roupas" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Categoria criada" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/categoria/{id}": {
+      "get": {
+        "summary": "Buscar categoria por ID",
+        "tags": ["Categorias"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Categoria encontrada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Categoria" } } } },
+          "404": { "description": "Categoria não encontrada" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar categoria",
+        "tags": ["Categorias"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -148,8 +247,399 @@
           }
         },
         "responses": {
-          "201": { "description": "Categoria criada" },
+          "200": { "description": "Categoria atualizada" },
+          "404": { "description": "Categoria não encontrada" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar categoria",
+        "tags": ["Categorias"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Categoria deletada" },
+          "404": { "description": "Categoria não encontrada" }
+        }
+      }
+    },
+    "/vendas": {
+      "get": {
+        "summary": "Listar todas as vendas",
+        "tags": ["Vendas"],
+        "responses": {
+          "200": {
+            "description": "Lista de vendas",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Venda" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar nova venda",
+        "tags": ["Vendas"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VendaInput" },
+              "example": { "usuario_id": 1, "valor_total": 100.0, "status_venda": "pendente" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Venda criada" },
           "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/vendas/{id}": {
+      "get": {
+        "summary": "Buscar venda por ID",
+        "tags": ["Vendas"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Venda encontrada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Venda" } } } },
+          "404": { "description": "Venda não encontrada" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar venda",
+        "tags": ["Vendas"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/VendaInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Venda atualizada" },
+          "404": { "description": "Venda não encontrada" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar venda",
+        "tags": ["Vendas"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Venda deletada" },
+          "404": { "description": "Venda não encontrada" }
+        }
+      }
+    },
+    "/itens_venda": {
+      "get": {
+        "summary": "Listar todos os itens de venda",
+        "tags": ["ItensVenda"],
+        "responses": {
+          "200": {
+            "description": "Lista de itens de venda",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ItemVenda" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar novo item de venda",
+        "tags": ["ItensVenda"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ItemVendaInput" },
+              "example": { "venda_id": 1, "produto_id": 2, "quantidade": 3, "preco_unitario": 10.0 }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Item de venda criado" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/itens_venda/{id}": {
+      "get": {
+        "summary": "Buscar item de venda por ID",
+        "tags": ["ItensVenda"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Item de venda encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ItemVenda" } } } },
+          "404": { "description": "Item de venda não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar item de venda",
+        "tags": ["ItensVenda"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ItemVendaInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Item de venda atualizado" },
+          "404": { "description": "Item de venda não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar item de venda",
+        "tags": ["ItensVenda"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Item de venda deletado" },
+          "404": { "description": "Item de venda não encontrado" }
+        }
+      }
+    },
+    "/fornecedores": {
+      "get": {
+        "summary": "Listar todos os fornecedores",
+        "tags": ["Fornecedores"],
+        "responses": {
+          "200": {
+            "description": "Lista de fornecedores",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Fornecedor" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar novo fornecedor",
+        "tags": ["Fornecedores"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FornecedorInput" },
+              "example": { "cnpj": "12345678000199", "nome": "Fornecedor X", "contato": "(11) 99999-9999" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Fornecedor criado" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/fornecedores/{id}": {
+      "get": {
+        "summary": "Buscar fornecedor por ID",
+        "tags": ["Fornecedores"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Fornecedor encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Fornecedor" } } } },
+          "404": { "description": "Fornecedor não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar fornecedor",
+        "tags": ["Fornecedores"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FornecedorInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Fornecedor atualizado" },
+          "404": { "description": "Fornecedor não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar fornecedor",
+        "tags": ["Fornecedores"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Fornecedor deletado" },
+          "404": { "description": "Fornecedor não encontrado" }
+        }
+      }
+    },
+    "/estoque": {
+      "get": {
+        "summary": "Listar todo o estoque",
+        "tags": ["Estoque"],
+        "responses": {
+          "200": {
+            "description": "Lista de registros de estoque",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Estoque" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Registrar novo estoque",
+        "tags": ["Estoque"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EstoqueInput" },
+              "example": { "produto_id": 1, "qtd": 100 }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Estoque criado" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/estoque/{produto_id}": {
+      "get": {
+        "summary": "Buscar estoque por produto_id",
+        "tags": ["Estoque"],
+        "parameters": [
+          { "name": "produto_id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Registro de estoque encontrado", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Estoque" } } } },
+          "404": { "description": "Registro de estoque não encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar quantidade de estoque",
+        "tags": ["Estoque"],
+        "parameters": [
+          { "name": "produto_id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EstoqueInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Estoque atualizado" },
+          "404": { "description": "Registro de estoque não encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar registro de estoque",
+        "tags": ["Estoque"],
+        "parameters": [
+          { "name": "produto_id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Registro de estoque deletado" },
+          "404": { "description": "Registro de estoque não encontrado" }
+        }
+      }
+    },
+    "/compras": {
+      "get": {
+        "summary": "Listar todas as compras",
+        "tags": ["Compras"],
+        "responses": {
+          "200": {
+            "description": "Lista de compras",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Compra" } }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar nova compra",
+        "tags": ["Compras"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CompraInput" },
+              "example": { "fornecedor_id": 1, "total": 200.0, "status_compra": "pendente" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Compra criada" },
+          "400": { "description": "Dados inválidos" }
+        }
+      }
+    },
+    "/compras/{id}": {
+      "get": {
+        "summary": "Buscar compra por ID",
+        "tags": ["Compras"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Compra encontrada", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Compra" } } } },
+          "404": { "description": "Compra não encontrada" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar compra",
+        "tags": ["Compras"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CompraInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Compra atualizada" },
+          "404": { "description": "Compra não encontrada" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar compra",
+        "tags": ["Compras"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "Compra deletada" },
+          "404": { "description": "Compra não encontrada" }
         }
       }
     }
@@ -159,9 +649,11 @@
       "User": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer" },
-          "nome": { "type": "string" },
-          "email": { "type": "string" }
+          "id": { "type": "integer", "description": "ID do usuário" },
+          "nome": { "type": "string", "description": "Nome do usuário" },
+          "email": { "type": "string", "description": "E-mail do usuário" },
+          "criado_em": { "type": "string", "format": "date-time", "description": "Data de criação" },
+          "atualizado_em": { "type": "string", "format": "date-time", "description": "Data de atualização" }
         }
       },
       "UserInput": {
@@ -176,13 +668,15 @@
       "Produto": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer" },
-          "nome": { "type": "string" },
-          "preco_pago": { "type": "number" },
-          "descricao": { "type": "string" },
-          "preco_vendido": { "type": "number" },
-          "id_categoria": { "type": "integer" },
-          "status": { "type": "integer" }
+          "id": { "type": "integer", "description": "ID do produto" },
+          "nome": { "type": "string", "description": "Nome do produto" },
+          "preco_pago": { "type": "number", "description": "Preço de compra" },
+          "descricao": { "type": "string", "description": "Descrição do produto" },
+          "preco_vendido": { "type": "number", "description": "Preço de venda" },
+          "id_categoria": { "type": "integer", "description": "ID da categoria" },
+          "status": { "type": "integer", "description": "Status do produto (1=ativo, 0=inativo)" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
         }
       },
       "ProdutoInput": {
@@ -201,7 +695,9 @@
         "type": "object",
         "properties": {
           "id": { "type": "integer" },
-          "nome": { "type": "string" }
+          "nome": { "type": "string" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
         }
       },
       "CategoriaInput": {
@@ -210,20 +706,110 @@
           "nome": { "type": "string" }
         },
         "required": ["nome"]
-      }
-    }
-  }
-}
-  "paths": {
-    "/exemplo": {
-      "get": {
-        "summary": "Exemplo de endpoint",
-        "responses": {
-          "200": {
-            "description": "Sucesso"
-          }
+      },
+      "Venda": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "usuario_id": { "type": "integer" },
+          "data_venda": { "type": "string", "format": "date-time" },
+          "valor_total": { "type": "number" },
+          "status_venda": { "type": "string" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
         }
+      },
+      "VendaInput": {
+        "type": "object",
+        "properties": {
+          "usuario_id": { "type": "integer" },
+          "valor_total": { "type": "number" },
+          "status_venda": { "type": "string" }
+        },
+        "required": ["usuario_id"]
+      },
+      "ItemVenda": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "venda_id": { "type": "integer" },
+          "produto_id": { "type": "integer" },
+          "quantidade": { "type": "integer" },
+          "preco_unitario": { "type": "number" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ItemVendaInput": {
+        "type": "object",
+        "properties": {
+          "venda_id": { "type": "integer" },
+          "produto_id": { "type": "integer" },
+          "quantidade": { "type": "integer" },
+          "preco_unitario": { "type": "number" }
+        },
+        "required": ["venda_id", "produto_id", "quantidade", "preco_unitario"]
+      },
+      "Fornecedor": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "cnpj": { "type": "string" },
+          "nome": { "type": "string" },
+          "contato": { "type": "string" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
+        }
+      },
+      "FornecedorInput": {
+        "type": "object",
+        "properties": {
+          "cnpj": { "type": "string" },
+          "nome": { "type": "string" },
+          "contato": { "type": "string" }
+        },
+        "required": ["cnpj", "nome"]
+      },
+      "Estoque": {
+        "type": "object",
+        "properties": {
+          "produto_id": { "type": "integer" },
+          "qtd": { "type": "integer" },
+          "data_atualizacao": { "type": "string", "format": "date-time" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
+        }
+      },
+      "EstoqueInput": {
+        "type": "object",
+        "properties": {
+          "produto_id": { "type": "integer" },
+          "qtd": { "type": "integer" }
+        },
+        "required": ["produto_id", "qtd"]
+      },
+      "Compra": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "fornecedor_id": { "type": "integer" },
+          "data_compra": { "type": "string", "format": "date-time" },
+          "total": { "type": "number" },
+          "status_compra": { "type": "string" },
+          "criado_em": { "type": "string", "format": "date-time" },
+          "atualizado_em": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CompraInput": {
+        "type": "object",
+        "properties": {
+          "fornecedor_id": { "type": "integer" },
+          "total": { "type": "number" },
+          "status_compra": { "type": "string" }
+        },
+        "required": ["fornecedor_id"]
       }
     }
   }
 }
+
